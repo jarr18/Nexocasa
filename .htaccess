@@ -1,0 +1,2 @@
+# Página por defecto del sitio: index.php (aunque quede algún index.html antiguo en la carpeta)
+DirectoryIndex index.php
