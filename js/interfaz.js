@@ -91,6 +91,15 @@ Nexocasa.interfaz = (function () {
             porId[def.id] = def;
         }
 
+        // Al pulsar un botón, el campo pierde el foco y su aviso desplazaría el botón antes de soltar
+        // el clic (el clic se perdería). Mientras se pulsa se omite esa validación: el envío valida todo.
+        let pulsandoBoton = false;
+        formulario.addEventListener("pointerdown", evento => {
+            if (!evento.target.closest("button")) return;
+            pulsandoBoton = true;
+            document.addEventListener("pointerup", () => setTimeout(() => { pulsandoBoton = false; }, 0), { once: true });
+        });
+
         function comprobar(def) {
             const mensaje = def.validar();
             if (mensaje) mostrarError(def.elemento, mensaje);
@@ -105,7 +114,7 @@ Nexocasa.interfaz = (function () {
                 continue;
             }
             // Al salir del campo se valida; después, mientras se corrige, se revalida al escribir
-            elemento.addEventListener("blur", () => comprobar(def));
+            elemento.addEventListener("blur", () => { if (!pulsandoBoton) comprobar(def); });
             elemento.addEventListener("input", () => {
                 if (elemento.getAttribute("aria-invalid") === "true") comprobar(def);
                 for (const idDependiente of def.revalidar || []) {

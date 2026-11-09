@@ -113,7 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
     contenedor.appendChild(crearTabla());
 
     boton.addEventListener("click", () => {
-        const oculta = contenedor.classList.toggle("oculto");
+        // Atributo hidden: funciona sin depender de ninguna hoja de estilos
+        contenedor.hidden = !contenedor.hidden;
+        const oculta = contenedor.hidden;
         boton.setAttribute("aria-expanded", String(!oculta));
         textoBoton.textContent = oculta ? "Mostrar tabla de costes" : "Ocultar tabla de costes";
     });
